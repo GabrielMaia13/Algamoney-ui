@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
 
-import { AuthHttp } from 'angular2-jwt';
 import 'rxjs/add/operator/toPromise';
-
-import { environment } from './../../environments/environment';
 
 @Injectable()
 export class CategoriaService {
 
-  categoriasUrl: string;
+  categoriasUrl = 'http://localhost:8080/categorias';
 
-  constructor(private http: AuthHttp) {
-    this.categoriasUrl = `${environment.apiUrl}/categorias`;
-  }
+  constructor(private http: Http) { }
 
   listarTodas(): Promise<any> {
-    return this.http.get(this.categoriasUrl)
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+
+    return this.http.get(this.categoriasUrl, { headers })
       .toPromise()
       .then(response => response.json());
   }

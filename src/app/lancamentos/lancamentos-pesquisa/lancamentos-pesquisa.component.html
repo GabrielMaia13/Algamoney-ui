@@ -62,8 +62,7 @@
                 [routerLink]="['/lancamentos', lanc.codigo]"></a>
               <button pButton icon="fa-trash"
                 pTooltip="Excluir" tooltipPosition="top"
-                (click)="confirmarExclusao(lanc)"
-                [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')"></button>
+                (click)="confirmarExclusao(lanc)"></button>
             </ng-template>
         </p-column>
       </p-dataTable>
@@ -72,7 +71,9 @@
     <div class="ui-g-12">
       <a pButton label="Novo Lançamento" routerLink="/lancamentos/novo"></a>
     </div>
-
+    <div class="ui-g-12" >
+      <button pButton type="button" label=Exportar  (click)="exportAsXLSX()"><i class="fa fa-download"></i></button>
+    </div>
   </div>
 
 </div>

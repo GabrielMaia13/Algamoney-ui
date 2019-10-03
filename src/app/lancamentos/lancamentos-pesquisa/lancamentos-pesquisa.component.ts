@@ -1,10 +1,10 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+
 import { LazyLoadEvent, ConfirmationService } from 'primeng/components/common/api';
 import { ToastyService } from 'ng2-toasty';
 
-import { AuthService } from './../../seguranca/auth.service';
 import { ErrorHandlerService } from './../../core/error-handler.service';
 import { LancamentoService, LancamentoFiltro } from './../lancamento.service';
 
@@ -22,7 +22,6 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService,
-    private auth: AuthService,
     private errorHandler: ErrorHandlerService,
     private toasty: ToastyService,
     private confirmation: ConfirmationService,
@@ -70,6 +69,9 @@ export class LancamentosPesquisaComponent implements OnInit {
         this.toasty.success('Lançamento excluído com sucesso!');
       })
       .catch(erro => this.errorHandler.handle(erro));
+  }
+  exportAsXLSX(): void {
+    this.lancamentoService.exportToExcel(this.lancamentos, 'Lançamentos');
   }
 
 }

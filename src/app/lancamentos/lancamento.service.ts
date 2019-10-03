@@ -1,11 +1,11 @@
-import { URLSearchParams } from '@angular/http';
+import { Http, Headers, URLSearchParams } from '@angular/http';
 import { Injectable } from '@angular/core';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
-import { AuthHttp } from 'angular2-jwt';
-import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
+import * as moment from 'moment';
 
-import { environment } from './../../environments/environment';
 import { Lancamento } from './../core/model';
 
 export class LancamentoFiltro {
@@ -16,17 +16,37 @@ export class LancamentoFiltro {
   itensPorPagina = 5;
 }
 
+const EXCEL_TYPE =
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8;';
+const EXCEL_EXT = '.xlsx';
+
 @Injectable()
 export class LancamentoService {
 
-  lancamentosUrl: string;
+  lancamentosUrl = 'http://localhost:8080/lancamentos';
 
-  constructor(private http: AuthHttp) {
-    this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
+  constructor(private http: Http) { }
+
+  exportToExcel(json: any[], excelFileName: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    const workbook: XLSX.WorkBook = {
+    Sheets: {'data': worksheet},
+    SheetNames: ['data']
+    };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // Chama o metodo buffer eo nome do arquivo
+    this.saveAsExcel(excelBuffer, excelFileName);
+  }
+  private saveAsExcel(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+    FileSaver.saveAs(data, `${fileName} _${new Date().getTime} ${EXCEL_EXT}`);
   }
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
     const params = new URLSearchParams();
+    const headers = new Headers();
+
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
 
     params.set('page', filtro.pagina.toString());
     params.set('size', filtro.itensPorPagina.toString());
@@ -46,7 +66,7 @@ export class LancamentoService {
     }
 
     return this.http.get(`${this.lancamentosUrl}?resumo`,
-        { search: params })
+        { headers, search: params })
       .toPromise()
       .then(response => {
         const responseJson = response.json();
@@ -62,21 +82,32 @@ export class LancamentoService {
   }
 
   excluir(codigo: number): Promise<void> {
-    return this.http.delete(`${this.lancamentosUrl}/${codigo}`)
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+
+    return this.http.delete(`${this.lancamentosUrl}/${codigo}`, { headers })
       .toPromise()
       .then(() => null);
   }
 
   adicionar(lancamento: Lancamento): Promise<Lancamento> {
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+    headers.append('Content-Type', 'application/json');
+
     return this.http.post(this.lancamentosUrl,
-        JSON.stringify(lancamento))
+        JSON.stringify(lancamento), { headers })
       .toPromise()
       .then(response => response.json());
   }
 
   atualizar(lancamento: Lancamento): Promise<Lancamento> {
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+    headers.append('Content-Type', 'application/json');
+
     return this.http.put(`${this.lancamentosUrl}/${lancamento.codigo}`,
-        JSON.stringify(lancamento))
+        JSON.stringify(lancamento), { headers })
       .toPromise()
       .then(response => {
         const lancamentoAlterado = response.json() as Lancamento;
@@ -88,7 +119,10 @@ export class LancamentoService {
   }
 
   buscarPorCodigo(codigo: number): Promise<Lancamento> {
-    return this.http.get(`${this.lancamentosUrl}/${codigo}`)
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+
+    return this.http.get(`${this.lancamentosUrl}/${codigo}`, { headers })
       .toPromise()
       .then(response => {
         const lancamento = response.json() as Lancamento;
