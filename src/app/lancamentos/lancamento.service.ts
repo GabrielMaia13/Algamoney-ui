@@ -37,7 +37,7 @@ export class LancamentoService {
     // Chama o metodo buffer eo nome do arquivo
     this.saveAsExcel(excelBuffer, excelFileName);
   }
-  private saveAsExcel(buffer: any, fileName: string): void {
+  private saveAsExcel(buffer: any, fileName: any): void {
     const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
     FileSaver.saveAs(data, fileName + EXCEL_EXT);
   }
@@ -67,8 +67,8 @@ export class LancamentoService {
 
     return this.http.get(`${this.lancamentosUrl}?resumo`,
         { headers, search: params })
-      .toPromise()
-      .then(response => {
+        .toPromise()
+        .then(response => {
         const responseJson = response.json();
         const lancamentos = responseJson.content;
 

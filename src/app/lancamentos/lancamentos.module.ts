@@ -12,6 +12,7 @@ import { TooltipModule } from 'primeng/components/tooltip/tooltip';
 import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { ButtonModule } from 'primeng/components/button/button';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
+import { DialogModule } from 'primeng/components/dialog/dialog';
 
 import { LancamentosRoutingModule } from './lancamentos-routing.module';
 import { SharedModule } from './../shared/shared.module';
@@ -32,6 +33,7 @@ import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-ca
     SelectButtonModule,
     DropdownModule,
     CurrencyMaskModule,
+    DialogModule,
 
     SharedModule,
     LancamentosRoutingModule

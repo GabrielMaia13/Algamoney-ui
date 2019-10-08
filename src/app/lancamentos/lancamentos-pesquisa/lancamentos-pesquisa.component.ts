@@ -7,6 +7,7 @@ import { ToastyService } from 'ng2-toasty';
 
 import { ErrorHandlerService } from './../../core/error-handler.service';
 import { LancamentoService, LancamentoFiltro } from './../lancamento.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -18,6 +19,9 @@ export class LancamentosPesquisaComponent implements OnInit {
   totalRegistros = 0;
   filtro = new LancamentoFiltro();
   lancamentos = [];
+  display: boolean;
+  exp: string;
+
   @ViewChild('tabela') grid;
 
   constructor(
@@ -70,8 +74,13 @@ export class LancamentosPesquisaComponent implements OnInit {
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
-  exportAsXLSX(): void {
-    this.lancamentoService.exportToExcel(this.lancamentos, 'Lançamentos');
+
+  exportAsXLSX() {
+    this.lancamentoService.exportToExcel(this.lancamentos, this.exp);
   }
+  showDialog() {
+    this.display = true;
+}
+
 
 }

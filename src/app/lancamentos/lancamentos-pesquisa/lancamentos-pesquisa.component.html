@@ -72,12 +72,16 @@
       <a pButton label="Novo Lançamento" routerLink="/lancamentos/novo"></a>
     </div>
     <div class="ui-g-12" >
-<!--       
-      <p-dialog header="Title" [(visible)]="display">
-        <button pButton type="button" label=Exportar  (click)="exportAsXLSX()"><i class="fa fa-download"></i></button>
-      </p-dialog> -->
+      <p-dialog header="Exportar Lançamentos" [modal]="true" [closeOnEscape]="true" [(visible)]="display" [width]="300" [height]="200">      
+            <form (submit)="exportAsXLSX()">
+              <div class="ui-fluid">
+                <input pInputText type="text" placeholder="Nome do arquivo" [(ngModel)]="exp" [ngModelOptions]="{standalone: true}"><br><br>
+                <button type="submit" pButton label="Salvar"></button>
+              </div>
+            </form>     
+      </p-dialog>
 
-      <button type="text" (click)="exportAsXLSX()" pButton icon="pi pi-info-circle" label="Show"></button>
+      <button type="text" (click)="showDialog()" pButton icon="fa fa-download" label="Exportar"></button>
     </div>
   </div>
 
