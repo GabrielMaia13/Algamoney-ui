@@ -72,7 +72,12 @@
       <a pButton label="Novo Lançamento" routerLink="/lancamentos/novo"></a>
     </div>
     <div class="ui-g-12" >
-      <button pButton type="button" label=Exportar  (click)="exportAsXLSX()"><i class="fa fa-download"></i></button>
+<!--       
+      <p-dialog header="Title" [(visible)]="display">
+        <button pButton type="button" label=Exportar  (click)="exportAsXLSX()"><i class="fa fa-download"></i></button>
+      </p-dialog> -->
+
+      <button type="text" (click)="exportAsXLSX()" pButton icon="pi pi-info-circle" label="Show"></button>
     </div>
   </div>
 
