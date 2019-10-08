@@ -7,6 +7,7 @@ import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { ButtonModule } from 'primeng/components/button/button';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
+import { DialogModule } from 'primeng/components/dialog/dialog';
 
 import { SharedModule } from './../shared/shared.module';
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
@@ -22,6 +23,7 @@ import { PessoaCadastroComponent } from './pessoa-cadastro/pessoa-cadastro.compo
     DataTableModule,
     TooltipModule,
     InputMaskModule,
+    DialogModule,
 
     SharedModule
   ],

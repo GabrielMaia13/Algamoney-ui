@@ -67,22 +67,23 @@
         </p-column>
       </p-dataTable>
     </div>
+    
+      <div class="ui-g-12">
+        <a pButton label="Novo Lançamento" routerLink="/lancamentos/novo"></a>
+      </div>
 
-    <div class="ui-g-12">
-      <a pButton label="Novo Lançamento" routerLink="/lancamentos/novo"></a>
-    </div>
-    <div class="ui-g-12" >
-      <p-dialog header="Exportar Lançamentos" [modal]="true" [closeOnEscape]="true" [(visible)]="display" [width]="300" [height]="200">      
+      <div class="ui-g-12" >
+        <p-dialog header="Exportar Lançamentos" [modal]="true" [draggable]="false" [closeOnEscape]="true" [(visible)]="display" [width]="300" [height]="200">      
             <form (submit)="exportAsXLSX()">
               <div class="ui-fluid">
                 <input pInputText type="text" placeholder="Nome do arquivo" [(ngModel)]="exp" [ngModelOptions]="{standalone: true}"><br><br>
                 <button type="submit" pButton label="Salvar"></button>
               </div>
             </form>     
-      </p-dialog>
+        </p-dialog>
+        <button type="text" (click)="showDialog()" pButton icon="fa fa-download" label="Exportar"></button>
+      </div>
 
-      <button type="text" (click)="showDialog()" pButton icon="fa fa-download" label="Exportar"></button>
-    </div>
   </div>
 
 </div>

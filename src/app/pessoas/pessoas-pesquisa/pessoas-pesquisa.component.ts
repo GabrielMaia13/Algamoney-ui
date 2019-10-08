@@ -16,6 +16,9 @@ export class PessoasPesquisaComponent {
   totalRegistros = 0;
   filtro = new PessoaFiltro();
   pessoas = [];
+  display: boolean;
+  exp: string;
+
   @ViewChild('tabela') grid;
 
   constructor(
@@ -76,5 +79,11 @@ export class PessoasPesquisaComponent {
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
+  exportAsXLSX() {
+    this.pessoaService.exportToExcel(this.pessoas, this.exp);
+  }
+  showDialog() {
+    this.display = true;
+}
 
 }
