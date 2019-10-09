@@ -74,6 +74,15 @@ export class LancamentosPesquisaComponent implements OnInit {
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
+  pegaTudo() {
+
+    this.lancamentoService.pegaTudo(this.filtro)
+      .then(resultado => {
+        this.totalRegistros = resultado.total;
+        this.lancamentos = resultado.lancamentos;
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
 
   exportAsXLSX() {
     this.lancamentoService.exportToExcel(this.lancamentos, this.exp);

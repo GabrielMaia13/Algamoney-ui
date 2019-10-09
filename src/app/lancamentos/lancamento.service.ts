@@ -14,6 +14,7 @@ export class LancamentoFiltro {
   dataVencimentoFim: Date;
   pagina = 0;
   itensPorPagina = 5;
+  trasItens = 15;
 }
 
 const EXCEL_TYPE =
@@ -26,21 +27,6 @@ export class LancamentoService {
   lancamentosUrl = 'http://localhost:8080/lancamentos';
 
   constructor(private http: Http) { }
-
-  exportToExcel(json: any[], excelFileName: string): void {
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    const workbook: XLSX.WorkBook = {
-    Sheets: {'data': worksheet},
-    SheetNames: ['data']
-    };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    // Chama o metodo buffer eo nome do arquivo
-    this.saveAsExcel(excelBuffer, excelFileName);
-  }
-  private saveAsExcel(buffer: any, fileName: any): void {
-    const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
-    FileSaver.saveAs(data, fileName + EXCEL_EXT);
-  }
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
     const params = new URLSearchParams();
@@ -143,6 +129,60 @@ export class LancamentoService {
           'YYYY-MM-DD').toDate();
       }
     }
+  }
+
+  exportToExcel(json: any[], excelFileName: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    const workbook: XLSX.WorkBook = {
+    Sheets: {'data': worksheet},
+    SheetNames: ['data']
+    };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // Chama o metodo buffer eo nome do arquivo
+    this.saveAsExcel(excelBuffer, excelFileName);
+  }
+
+  private saveAsExcel(buffer: any, fileName: any): void {
+    const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+    FileSaver.saveAs(data, fileName + EXCEL_EXT);
+  }
+
+  pegaTudo(filtro: LancamentoFiltro): Promise<any> {
+    const params = new URLSearchParams();
+    const headers = new Headers();
+
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+
+    params.set('size', filtro.trasItens.toString());
+
+    if (filtro.descricao) {
+      params.set('descricao', filtro.descricao);
+    }
+
+    if (filtro.dataVencimentoInicio) {
+      params.set('dataVencimentoDe',
+        moment(filtro.dataVencimentoInicio).format('YYYY-MM-DD'));
+    }
+
+    if (filtro.dataVencimentoFim) {
+      params.set('dataVencimentoAte',
+        moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
+    }
+
+    return this.http.get(`${this.lancamentosUrl}?resumo`,
+        { headers, search: params })
+        .toPromise()
+        .then(response => {
+        const responseJson = response.json();
+        const lancamentos = responseJson.content;
+
+        const resultado = {
+          lancamentos,
+          total: responseJson.totalElements
+        };
+
+        return resultado;
+      });
   }
 
 }
